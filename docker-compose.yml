@@ -1,0 +1,7 @@
+services:
+  github_app:
+    build:
+      context: .
+      target: github_app
+    ports:
+      - '3000:3000'
