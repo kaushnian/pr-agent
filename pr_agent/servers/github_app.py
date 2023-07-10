@@ -38,15 +38,22 @@ async def handle_request(body):
     agent = PRAgent(installation_id)
     if action == 'created':
         if "comment" not in body:
-            return {}
-        comment_body = body.get("comment", {}).get("body", None)
+            return {}        
         if 'sender' in body and 'login' in body['sender'] and 'bot' in body['sender']['login']:
             return {}
         if "issue" not in body and "pull_request" not in body["issue"]:
             return {}
+        
+        pr_agent_name = '@propcheck-pr-agent'
+        comment_body = body.get("comment", {}).get("body", None)
+        
+        if pr_agent_name not in comment_body:
+            return {}
+        
         pull_request = body["issue"]["pull_request"]
         api_url = pull_request.get("url", None)
-        await agent.handle_request(api_url, comment_body)
+        
+        await agent.handle_request(api_url, comment_body.replace(pr_agent_name, ''))
 
     elif action in ["opened"] or 'reopened' in action:
         pull_request = body.get("pull_request", None)
