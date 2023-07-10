@@ -50,10 +50,10 @@ async def handle_request(body):
         if pr_agent_name not in comment_body:
             return {}
         
-        pull_request = body["issue"]["pull_request"]
-        api_url = pull_request.get("url", None)
+        api_url = body["issue"]["pull_request"].get("url", None)
+        request_body = comment_body.replace(pr_agent_name, '')
         
-        await agent.handle_request(api_url, comment_body.replace(pr_agent_name, ''))
+        await agent.handle_request(api_url, request_body)
 
     elif action in ["opened"] or 'reopened' in action:
         pull_request = body.get("pull_request", None)

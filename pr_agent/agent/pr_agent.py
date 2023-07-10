@@ -10,7 +10,7 @@ class PRAgent:
         self.installation_id = installation_id
 
     async def handle_request(self, pr_url, request):
-        if 'please review' in request.lower() or 'review' == request.lower().strip() or len(request) == 0:
+        if 'please review' in request.lower() or 'review' == request.lower().strip() or len(request.trim()) == 0:
             reviewer = PRReviewer(pr_url, self.installation_id)
             await reviewer.review()
 
